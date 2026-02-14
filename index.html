@@ -64,6 +64,15 @@
         }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; transition: all 0.3s; }
         .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        
+        /* 新增：禁用無滾動條 */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-background-dark text-gray-200 font-sans antialiased selection:bg-primary selection:text-black">
@@ -82,17 +91,17 @@
                 </a>
                 
                 <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400 ml-4">
-                    <a href="#" class="text-white border-b-2 border-primary pb-5 mt-5">實境直播</a>
-                    <a href="#" class="hover:text-primary transition-colors">直播預告</a>
-                    <a href="#" class="hover:text-primary transition-colors">深夜食堂</a>
-                    <a href="#" class="hover:text-primary transition-colors">精彩回放</a>
+                    <a href="#" class="text-white border-b-2 border-primary pb-5 mt-5" onclick="return false;">實境直播</a>
+                    <a href="#" class="hover:text-primary transition-colors" onclick="return false;">直播預告</a>
+                    <a href="#" class="hover:text-primary transition-colors" onclick="return false;">深夜食堂</a>
+                    <a href="#" class="hover:text-primary transition-colors" onclick="return false;">精彩回放</a>
                 </nav>
             </div>
 
             <div class="flex items-center gap-4">
                 <div class="relative hidden lg:block group">
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg group-focus-within:text-primary">search</span>
-                    <input type="text" placeholder="搜尋美味..." class="bg-[#1a1a1a] border border-white/10 rounded-full py-1.5 pl-10 pr-4 text-sm w-48 focus:w-64 focus:ring-1 focus:ring-primary focus:border-primary transition-all outline-none text-white placeholder-gray-600">
+                    <input type="text" placeholder="搜尋美味..." class="bg-[#1a1a1a] border border-white/10 rounded-full py-1.5 pl-10 pr-4 text-sm w-48 focus:w-64 focus:ring-1 focus:ring-primary focus:border-transparent transition-all"/>
                 </div>
             </div>
         </div>
@@ -112,7 +121,7 @@
                         <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center mb-4 border border-white/10 shadow-lg relative overflow-hidden">
                             <span class="absolute inset-0 bg-gradient-to-tr from-[#25F4EE] to-[#FE2C55] opacity-20"></span>
                             <svg class="w-8 h-8 text-white relative z-10" fill="currentColor" viewBox="0 0 448 512">
-                                <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"/>
+                                <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A210.06,210.06,0,0,0,448,209.91Z"/>
                             </svg>
                         </div>
                         
@@ -124,7 +133,7 @@
                             <p>預計開播時間：<span class="text-white font-bold">20:00</span></p>
                         </div>
 
-                        <button class="px-6 py-2 rounded-full border border-white/20 text-white text-xs hover:bg-white hover:text-black transition-colors flex items-center gap-2">
+                        <button onclick="notifyLive()" class="px-6 py-2 rounded-full border border-white/20 text-white text-xs hover:bg-white hover:text-black transition-colors flex items-center gap-2 cursor-pointer">
                             <span class="material-symbols-outlined text-sm">notifications_active</span>
                             開播提醒我
                         </button>
@@ -132,30 +141,27 @@
                 </div>
 
                 <div id="online-state" class="absolute inset-0 z-30 hidden bg-black">
-                    <iframe class="w-full h-full" 
-                            src="https://www.tiktok.com/embed/v2/user/tiktok?lang=zh-Hant-TW" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                    </iframe>
-                    <div class="absolute top-6 left-6 flex items-center gap-3 pointer-events-none">
-                        <div class="flex items-center gap-1.5 bg-[#FE2C55] text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
-                            <span class="w-1.5 h-1.5 bg-white rounded-full live-dot"></span> 直播中
+                    <div class="w-full h-full flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="w-20 h-20 bg-gradient-to-tr from-[#25F4EE] to-[#FE2C55] rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-4xl">play_circle</span>
+                            </div>
+                            <p class="text-gray-300">貓掌櫃直播中...</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="absolute top-4 right-4 z-50">
-                    <label class="inline-flex items-center cursor-pointer bg-black/50 backdrop-blur px-3 py-1 rounded-full border border-white/10">
-                        <input type="checkbox" onchange="toggleLiveStatus(this)" class="sr-only peer">
+                    <label class="inline-flex items-center cursor-pointer bg-black/50 backdrop-blur px-3 py-1 rounded-full border border-white/10 hover:border-primary/50 transition-colors">
+                        <input type="checkbox" id="live-toggle" onchange="toggleLiveStatus(this)" class="sr-only peer">
                         <span class="mr-2 text-[10px] text-gray-300 font-bold">模擬開播</span>
-                        <div class="relative w-8 h-4 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary"></div>
+                        <div class="relative w-8 h-4 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
                     </label>
                 </div>
 
                 <div id="live-controls" class="absolute bottom-8 right-8 flex flex-col gap-4 z-40 transition-opacity opacity-0 pointer-events-none">
-                    <button id="like-btn" class="flex flex-col items-center gap-1 group/btn pointer-events-auto active:scale-90 transition-transform">
-                        <div class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover/btn:bg-[#FE2C55] group-hover/btn:border-transparent transition-colors">
+                    <button id="like-btn" class="flex flex-col items-center gap-1 group/btn pointer-events-auto active:scale-90 transition-transform cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover/btn:bg-[#FE2C55] group-hover/btn:border-transparent transition-all">
                             <span id="like-icon" class="material-symbols-outlined text-xl text-white">favorite</span>
                         </div>
                         <span id="like-count" class="text-[10px] font-bold text-white shadow-black drop-shadow-md">12.8k</span>
@@ -166,7 +172,7 @@
             <div class="lg:col-span-1 glass-panel rounded-2xl flex flex-col overflow-hidden h-[500px] lg:h-full">
                 <div class="h-12 border-b border-white/10 flex items-center justify-between px-4 bg-white/5">
                     <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">forum 即時互動</span>
-                    <span class="material-symbols-outlined text-gray-500 text-sm cursor-pointer hover:text-white">settings</span>
+                    <span class="material-symbols-outlined text-gray-500 text-sm cursor-pointer hover:text-white transition-colors">settings</span>
                 </div>
                 
                 <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
@@ -181,15 +187,15 @@
                         <div class="w-6 h-6 rounded-full bg-primary text-black text-[10px] font-bold flex items-center justify-center shrink-0">貓</div>
                         <div class="text-right">
                             <span class="text-[10px] text-primary block mb-0.5 font-bold">verified 職人貓掌櫃</span>
-                            <div class="bg-primary/10 rounded-lg rounded-tr-none p-2 text-sm text-primary border border-primary/20 text-left">秘訣在於我們自家釀造的小量生產黑豆醬油。</div>
+                            <div class="bg-primary/10 rounded-lg rounded-tr-none p-2 text-sm text-primary border border-primary/20 text-left">秘訣在於我們自家釀造的小量生產黑豆醬油</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="p-3 bg-black/40 border-t border-white/10">
                     <div class="relative">
-                        <input id="chat-input" type="text" placeholder="發送訊息..." class="w-full bg-[#1a1a1a] text-gray-200 text-sm rounded-lg pl-3 pr-10 py-2 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
-                        <button onclick="sendMessage()" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors hover:scale-110 active:scale-95">
+                        <input id="chat-input" type="text" placeholder="發送訊息..." class="w-full bg-[#1a1a1a] text-gray-200 text-sm rounded-lg pl-3 pr-10 py-2 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all"/>
+                        <button onclick="sendMessage()" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors hover:scale-110 active:scale-95 cursor-pointer">
                             <span class="material-symbols-outlined text-lg">send</span>
                         </button>
                     </div>
@@ -201,15 +207,15 @@
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-bold text-primary flex items-center gap-2 border-l-4 border-primary pl-3">直播推薦商品</h3>
                 <div class="flex gap-2 text-gray-500">
-                    <button onclick="scrollProducts('left')" class="p-1 hover:text-white hover:bg-white/10 rounded transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
-                    <button onclick="scrollProducts('right')" class="p-1 hover:text-white hover:bg-white/10 rounded transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+                    <button onclick="scrollProducts('left')" class="p-1 hover:text-white hover:bg-white/10 rounded transition-colors cursor-pointer"><span class="material-symbols-outlined">chevron_left</span></button>
+                    <button onclick="scrollProducts('right')" class="p-1 hover:text-white hover:bg-white/10 rounded transition-colors cursor-pointer"><span class="material-symbols-outlined">chevron_right</span></button>
                 </div>
             </div>
             
             <div id="product-scroll" class="grid grid-flow-col auto-cols-[85%] md:auto-cols-[32%] gap-4 overflow-x-auto pb-4 snap-x scroll-smooth no-scrollbar">
                 <div class="bg-panel-dark border border-white/5 rounded-xl p-3 flex gap-4 hover:border-primary/50 transition-all group snap-center min-w-0">
                     <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1544025162-d76690b68f11?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76690b68f11?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition-transform" alt="招牌琥珀鴨翅"/>
                     </div>
                     <div class="flex flex-col justify-between flex-1 py-1 min-w-0">
                         <div>
@@ -218,7 +224,7 @@
                         </div>
                         <div class="flex items-center justify-between mt-2">
                             <span class="text-primary font-bold font-serif text-lg">NT$ 480</span>
-                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-4 py-1.5 rounded hover:bg-white transition-all font-serif active:scale-95 whitespace-nowrap inline-block text-center">
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-3 py-1 rounded-full hover:bg-primary-hover transition-colors cursor-pointer">
                                 立即下單
                             </a>
                         </div>
@@ -226,7 +232,7 @@
                 </div>
                 <div class="bg-panel-dark border border-white/5 rounded-xl p-3 flex gap-4 hover:border-primary/50 transition-all group snap-center min-w-0">
                     <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition-transform" alt="極上絲綢油豆腐"/>
                     </div>
                     <div class="flex flex-col justify-between flex-1 py-1 min-w-0">
                         <div>
@@ -235,7 +241,7 @@
                         </div>
                         <div class="flex items-center justify-between mt-2">
                             <span class="text-primary font-bold font-serif text-lg">NT$ 220</span>
-                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-4 py-1.5 rounded hover:bg-white transition-all font-serif active:scale-95 whitespace-nowrap inline-block text-center">
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-3 py-1 rounded-full hover:bg-primary-hover transition-colors cursor-pointer">
                                 立即下單
                             </a>
                         </div>
@@ -243,7 +249,7 @@
                 </div>
                 <div class="bg-panel-dark border border-white/5 rounded-xl p-3 flex gap-4 hover:border-primary/50 transition-all group snap-center min-w-0">
                     <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-110 transition-transform" alt="職人手切牛腱心"/>
                     </div>
                     <div class="flex flex-col justify-between flex-1 py-1 min-w-0">
                         <div>
@@ -252,7 +258,7 @@
                         </div>
                         <div class="flex items-center justify-between mt-2">
                             <span class="text-primary font-bold font-serif text-lg">NT$ 650</span>
-                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-4 py-1.5 rounded hover:bg-white transition-all font-serif active:scale-95 whitespace-nowrap inline-block text-center">
+                            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-3 py-1 rounded-full hover:bg-primary-hover transition-colors cursor-pointer">
                                 立即下單
                             </a>
                         </div>
@@ -264,32 +270,32 @@
         <section>
             <h3 class="text-lg font-bold text-primary flex items-center gap-2 border-l-4 border-primary pl-3 mb-6">本週直播預告</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1">
+                <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                     <span class="text-primary text-xs font-bold border-b border-primary/30 pb-1 mb-2 inline-block">週三 20:00</span>
                     <h4 class="text-white font-bold text-lg mb-4 leading-snug">台中夜市：<br>傳統美味的新詮釋</h4>
                     <div class="flex items-center justify-between mt-auto">
-                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto">提醒我</button>
+                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                     </div>
                 </div>
-                <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1">
+                <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                     <span class="text-gray-500 text-xs font-bold border-b border-gray-700 pb-1 mb-2 inline-block">週五 21:00</span>
                     <h4 class="text-white font-bold text-lg mb-4 leading-snug">新品試吃：<br>琥珀系列第二彈</h4>
                     <div class="flex items-center justify-between mt-auto">
-                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto">提醒我</button>
+                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                     </div>
                 </div>
-                <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1">
+                <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                      <span class="text-gray-500 text-xs font-bold border-b border-gray-700 pb-1 mb-2 inline-block">週日 15:00</span>
                     <h4 class="text-white font-bold text-lg mb-4 leading-snug">大坑健行：<br>山林間的午后食刻</h4>
                     <div class="flex items-center justify-between mt-auto">
-                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto">提醒我</button>
+                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                     </div>
                 </div>
-                 <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1">
+                 <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                     <span class="text-gray-500 text-xs font-bold border-b border-gray-700 pb-1 mb-2 inline-block">10/31 20:00</span>
                    <h4 class="text-white font-bold text-lg mb-4 leading-snug">萬聖節深夜食堂：<br>驚喜限定版</h4>
                    <div class="flex items-center justify-between mt-auto">
-                       <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto">提醒我</button>
+                       <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                    </div>
                </div>
             </div>
@@ -300,9 +306,9 @@
         <div class="max-w-[1600px] mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-600">
             <p>© 2026 貓掌櫃 Neko Master 職人之魂。保留所有權利。</p>
             <div class="flex gap-6 mt-4 md:mt-0">
-                <a href="#" class="hover:text-gray-400">隱私權政策</a>
-                <a href="#" class="hover:text-gray-400">服務條款</a>
-                <a href="#" class="hover:text-gray-400">聯絡掌櫃</a>
+                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors">隱私權政策</a>
+                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors">服務條款</a>
+                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors">聯絡掌櫃</a>
             </div>
         </div>
     </footer>
@@ -394,7 +400,12 @@
             }
         }
 
-        // 5. 提醒我按鈕
+        // 5. 開播��醒功能
+        function notifyLive() {
+            showToast('✨ 已將開播時間加入提醒！');
+        }
+
+        // 6. 提醒我按鈕
         function toggleReminder(btn) {
             if (btn.classList.contains('active-reminder')) {
                 btn.classList.remove('active-reminder', 'bg-primary', 'text-black');
@@ -418,6 +429,7 @@
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transform = 'translateY(-10px)';
+                toast.style.transition = 'all 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
