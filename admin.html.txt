@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>貓掌櫃 | 後台管理系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neko-gold': '#facc15',
+                        'neko-dark': '#0c0c0c',
+                        'neko-panel': '#1a1a1a',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #0c0c0c; color: #e5e5e5; }
+        .serif { font-family: 'Noto Serif TC', serif; }
+        .sidebar-link:hover { background-color: rgba(250, 204, 21, 0.1); color: #facc15; border-right: 3px solid #facc15; }
+        .sidebar-link.active { background-color: rgba(250, 204, 21, 0.2); color: #facc15; border-right: 3px solid #facc15; }
+        /* 模擬開關 */
+        .toggle-checkbox:checked { right: 0; border-color: #facc15; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #facc15; }
+        /* 表格樣式 */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px; color: #6b7280; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #333; }
+        td { padding: 16px 12px; border-bottom: 1px solid #262626; }
+        tr:hover { background-color: #262626; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-neko-panel border-r border-gray-800 flex flex-col hidden md:flex">
+        <div class="h-20 flex items-center px-8 border-b border-gray-800">
+            <div class="h-8 w-8 bg-neko-gold rounded-full flex items-center justify-center text-black font-serif font-bold mr-3">貓</div>
+            <h1 class="text-xl font-bold tracking-wider text-white">貓掌櫃 <span class="text-xs text-neko-gold block font-normal">管理中樞</span></h1>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4">
+            <a href="#" class="sidebar-link active flex items-center px-8 py-4 text-gray-400 transition-all">
+                <span class="material-icons-outlined mr-3">dashboard</span> 營運總覽
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-8 py-4 text-gray-400 transition-all">
+                <span class="material-icons-outlined mr-3">receipt_long</span> 訂單管理 <span class="ml-auto bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">3</span>
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-8 py-4 text-gray-400 transition-all">
+                <span class="material-icons-outlined mr-3">restaurant_menu</span> 菜單與價格
+            </a>
+            <a href="#" class="sidebar-link flex items-center px-8 py-4 text-gray-400 transition-all">
+                <span class="material-icons-outlined mr-3">inventory_2</span> 庫存盤點
+            </a>
+            <a href="index.html" class="sidebar-link flex items-center px-8 py-4 text-gray-400 transition-all mt-auto border-t border-gray-800">
+                <span class="material-icons-outlined mr-3">logout</span> 登出返回首頁
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-20 bg-neko-panel border-b border-gray-800 flex items-center justify-between px-8">
+            <div class="flex items-center md:hidden">
+                <button class="text-gray-400 hover:text-white"><span class="material-icons-outlined">menu</span></button>
+                <span class="ml-4 font-bold text-lg">貓掌櫃後台</span>
+            </div>
+            <div class="hidden md:block text-gray-400 text-sm">
+                👋 晚安，小虎店長。今日營業額 <span class="text-neko-gold font-bold text-lg ml-2">$3,280</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <button class="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-3 py-1.5 rounded-full transition">
+                    <div class="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-xs font-bold text-gray-300">營業中</span>
+                </button>
+                <div class="h-10 w-10 rounded-full bg-gray-700 border-2 border-neko-gold overflow-hidden">
+                    <img src="https://placehold.co/100x100/333/fff?text=Cat" alt="Admin" class="h-full w-full object-cover">
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-neko-panel p-6 rounded-xl border border-gray-800">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wider">今日訂單</p>
+                            <h3 class="text-3xl font-bold text-white mt-2">12 <span class="text-sm text-gray-500 font-normal">單</span></h3>
+                        </div>
+                        <span class="p-2 bg-blue-500/20 text-blue-400 rounded-lg material-icons-outlined">shopping_bag</span>
+                    </div>
+                </div>
+                <div class="bg-neko-panel p-6 rounded-xl border border-gray-800">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wider">待處理</p>
+                            <h3 class="text-3xl font-bold text-neko-gold mt-2">3 <span class="text-sm text-gray-500 font-normal">單</span></h3>
+                        </div>
+                        <span class="p-2 bg-neko-gold/20 text-neko-gold rounded-lg material-icons-outlined">pending_actions</span>
+                    </div>
+                </div>
+                <div class="bg-neko-panel p-6 rounded-xl border border-gray-800">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wider">鴨翅庫存</p>
+                            <h3 class="text-3xl font-bold text-red-500 mt-2">5 <span class="text-sm text-gray-500 font-normal">份</span></h3>
+                        </div>
+                        <span class="p-2 bg-red-500/20 text-red-400 rounded-lg material-icons-outlined">warning</span>
+                    </div>
+                    <p class="text-xs text-red-400 mt-2 flex items-center"><span class="material-icons-outlined text-xs mr-1">error</span> 低於安全水位</p>
+                </div>
+                <div class="bg-neko-panel p-6 rounded-xl border border-gray-800">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-500 text-xs uppercase tracking-wider">本週營收</p>
+                            <h3 class="text-3xl font-bold text-green-400 mt-2">$18k</h3>
+                        </div>
+                        <span class="p-2 bg-green-500/20 text-green-400 rounded-lg material-icons-outlined">attach_money</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-2 bg-neko-panel rounded-xl border border-gray-800 overflow-hidden">
+                    <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-white flex items-center">
+                            <span class="material-icons-outlined mr-2 text-neko-gold">receipt_long</span> 最新訂單
+                        </h2>
+                        <button class="text-xs bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded text-gray-300 transition">查看全部</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>訂單編號</th>
+                                    <th>顧客</th>
+                                    <th>內容</th>
+                                    <th>總計</th>
+                                    <th>狀態</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr>
+                                    <td class="font-mono text-gray-400">#ORD-2026</td>
+                                    <td><div class="font-bold">陳小姐</div><div class="text-xs text-gray-500">0912-345***</div></td>
+                                    <td>招牌牛肚 x2, 鴨翅 x5</td>
+                                    <td class="font-bold text-neko-gold">$610</td>
+                                    <td><span class="px-2 py-1 bg-yellow-500/20 text-yellow-500 rounded text-xs">未付款</span></td>
+                                    <td><button class="text-gray-400 hover:text-white"><span class="material-icons-outlined">more_vert</span></button></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono text-gray-400">#ORD-2025</td>
+                                    <td><div class="font-bold">王大明</div><div class="text-xs text-gray-500">LINE ID: wang88</div></td>
+                                    <td>極品牛腱 x1, 辣醬 x1</td>
+                                    <td class="font-bold text-neko-gold">$450</td>
+                                    <td><span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">製作中</span></td>
+                                    <td><button class="text-gray-400 hover:text-white"><span class="material-icons-outlined">more_vert</span></button></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono text-gray-400">#ORD-2024</td>
+                                    <td><div class="font-bold">團購主-林先生</div><div class="text-xs text-gray-500">台中西屯</div></td>
+                                    <td>鴨翅團購組 x10</td>
+                                    <td class="font-bold text-neko-gold">$4,800</td>
+                                    <td><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">已出貨</span></td>
+                                    <td><button class="text-gray-400 hover:text-white"><span class="material-icons-outlined">more_vert</span></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-neko-panel rounded-xl border border-gray-800 flex flex-col">
+                    <div class="p-6 border-b border-gray-800">
+                        <h2 class="text-lg font-bold text-white flex items-center">
+                            <span class="material-icons-outlined mr-2 text-neko-gold">edit</span> 快速改價
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">直接點擊價格即可修改</p>
+                    </div>
+                    <div class="p-4 space-y-4 flex-1 overflow-y-auto">
+                        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg border border-gray-800">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 bg-gray-800 rounded mr-3 flex items-center justify-center text-xs text-gray-600">圖</div>
+                                <div>
+                                    <div class="text-sm font-bold text-gray-300">職人招牌牛肚</div>
+                                    <div class="text-xs text-green-500">庫存充足</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 text-xs mr-1">$</span>
+                                <input type="text" value="180" class="w-12 bg-transparent text-right font-bold text-neko-gold border-b border-gray-700 focus:border-neko-gold focus:outline-none">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg border border-gray-800">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 bg-gray-800 rounded mr-3 flex items-center justify-center text-xs text-gray-600">圖</div>
+                                <div>
+                                    <div class="text-sm font-bold text-gray-300">秘製香料鴨翅</div>
+                                    <div class="text-xs text-red-500">剩 5 份</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 text-xs mr-1">$</span>
+                                <input type="text" value="50" class="w-12 bg-transparent text-right font-bold text-neko-gold border-b border-gray-700 focus:border-neko-gold focus:outline-none">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-900 rounded-lg border border-gray-800">
+                            <div class="flex items-center">
+                                <div class="h-10 w-10 bg-gray-800 rounded mr-3 flex items-center justify-center text-xs text-gray-600">圖</div>
+                                <div>
+                                    <div class="text-sm font-bold text-gray-300">小虎特製辣醬</div>
+                                    <div class="text-xs text-green-500">庫存充足</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-500 text-xs mr-1">$</span>
+                                <input type="text" value="150" class="w-12 bg-transparent text-right font-bold text-neko-gold border-b border-gray-700 focus:border-neko-gold focus:outline-none">
+                            </div>
+                        </div>
+
+                        <button class="w-full py-3 bg-neko-gold text-black font-bold rounded-lg hover:bg-yellow-400 transition mt-4">
+                            儲存所有修改
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
