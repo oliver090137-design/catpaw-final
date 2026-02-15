@@ -27,6 +27,7 @@
                     animation: {
                         'bounce-short': 'bounce-short 0.5s ease-in-out 1',
                         'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
+                        'float': 'float 3s ease-in-out infinite',
                     },
                     keyframes: {
                         'bounce-short': {
@@ -36,6 +37,10 @@
                         'fadeInUp': {
                             '0%': { opacity: '0', transform: 'translateY(10px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
                         }
                     }
                 },
@@ -73,6 +78,131 @@
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
+
+        /* 導航菜單活躍狀態 */
+        .nav-link {
+            position: relative;
+            padding-bottom: 0.5rem;
+            padding-top: 1.25rem;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #d5a776;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: white;
+        }
+
+        .nav-link:not(.active) {
+            color: #9ca3af;
+        }
+
+        /* 新增：高級 LOGO 風格 */
+        .logo-frame {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid #d5a776;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(213, 167, 118, 0.3), transparent);
+            box-shadow: 
+                inset 0 0 10px rgba(213, 167, 118, 0.2),
+                0 0 15px rgba(213, 167, 118, 0.4),
+                0 0 30px rgba(213, 167, 118, 0.2);
+        }
+
+        .logo-frame::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border: 1px solid rgba(213, 167, 118, 0.5);
+            border-radius: 50%;
+        }
+
+        .logo-content {
+            position: relative;
+            z-index: 2;
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d5a776, #f0d9b5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .logo-label {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .logo-main {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            background: linear-gradient(90deg, #ffffff, #d5a776);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 8px rgba(213, 167, 118, 0.3);
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: #d5a776;
+            border-left: 2px solid rgba(213, 167, 118, 0.5);
+            padding-left: 6px;
+            margin-top: 2px;
+            text-transform: uppercase;
+        }
+
+        /* LOGO 懸停效果 */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .logo-frame {
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .logo-container:hover .logo-frame::before {
+            box-shadow: 
+                inset 0 0 12px rgba(213, 167, 118, 0.4),
+                0 0 20px rgba(213, 167, 118, 0.6),
+                0 0 40px rgba(213, 167, 118, 0.3);
+        }
+
+        .logo-container:hover .logo-main {
+            filter: brightness(1.2);
+        }
     </style>
 </head>
 <body class="bg-background-dark text-gray-200 font-sans antialiased selection:bg-primary selection:text-black">
@@ -82,19 +212,38 @@
     <header class="fixed top-0 w-full z-50 bg-background-dark/90 backdrop-blur-md border-b border-white/5">
         <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-8">
-                <a href="#" class="flex items-center gap-3 group">
-                    <div class="w-9 h-9 bg-primary rounded-md flex items-center justify-center text-black font-serif font-bold text-xl shadow-lg shadow-primary/20">貓</div>
-                    <div class="flex items-baseline gap-2">
-                        <span class="font-bold text-xl tracking-wide text-white group-hover:text-primary transition-colors">貓掌櫃</span>
-                        <span class="text-xs text-primary font-bold tracking-widest uppercase border-l border-white/20 pl-2">直播中心</span>
+                <a href="#" onclick="navigateTo('home'); return false;" class="logo-container group">
+                    <div class="logo-frame">
+                        <svg class="logo-content" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- 貓頭輪廓 -->
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
+                            <!-- 左耳 -->
+                            <path d="M8 7L6 3L8 8Z" fill="currentColor" opacity="0.9"/>
+                            <!-- 右耳 -->
+                            <path d="M16 7L18 3L16 8Z" fill="currentColor" opacity="0.9"/>
+                            <!-- 頭 -->
+                            <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1" opacity="0.8"/>
+                            <!-- 左眼 -->
+                            <circle cx="10" cy="11" r="1.2" fill="currentColor"/>
+                            <!-- 右眼 -->
+                            <circle cx="14" cy="11" r="1.2" fill="currentColor"/>
+                            <!-- 鼻子 -->
+                            <path d="M12 13 L11.5 14 L12.5 14Z" fill="currentColor" opacity="0.8"/>
+                            <!-- 嘴巴 -->
+                            <path d="M11 15 Q12 15.8 13 15" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.7"/>
+                        </svg>
+                    </div>
+                    <div class="logo-label">
+                        <span class="logo-main">貓掌櫃</span>
+                        <span class="logo-sub">直播中心</span>
                     </div>
                 </a>
                 
-                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400 ml-4">
-                    <a href="#" class="text-white border-b-2 border-primary pb-5 mt-5" onclick="return false;">實境直播</a>
-                    <a href="#" class="hover:text-primary transition-colors" onclick="return false;">直播預告</a>
-                    <a href="#" class="hover:text-primary transition-colors" onclick="return false;">深夜食堂</a>
-                    <a href="#" class="hover:text-primary transition-colors" onclick="return false;">精彩回放</a>
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium ml-4">
+                    <a href="#" onclick="navigateTo('live'); return false;" class="nav-link active cursor-pointer transition-colors">實境直播</a>
+                    <a href="#" onclick="navigateTo('announce'); return false;" class="nav-link cursor-pointer transition-colors">直播預告</a>
+                    <a href="#" onclick="navigateTo('midnight'); return false;" class="nav-link cursor-pointer transition-colors">深夜食堂</a>
+                    <a href="#" onclick="navigateTo('replay'); return false;" class="nav-link cursor-pointer transition-colors">精彩回放</a>
                 </nav>
             </div>
 
@@ -103,6 +252,10 @@
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-lg group-focus-within:text-primary">search</span>
                     <input type="text" placeholder="搜尋美味..." class="bg-[#1a1a1a] border border-white/10 rounded-full py-1.5 pl-10 pr-4 text-sm w-48 focus:w-64 focus:ring-1 focus:ring-primary focus:border-transparent transition-all"/>
                 </div>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeccRFTZqf_yt-5ME6oBAlKXYM8KC5lS3giUFZugNyOV9ZPWg/viewform?usp=publish-editor" target="_blank" class="bg-primary text-black text-xs font-bold px-4 py-2 rounded-full hover:bg-primary-hover transition-colors cursor-pointer flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">shopping_cart</span>
+                    下單
+                </a>
             </div>
         </div>
     </header>
@@ -274,28 +427,28 @@
                     <span class="text-primary text-xs font-bold border-b border-primary/30 pb-1 mb-2 inline-block">週三 20:00</span>
                     <h4 class="text-white font-bold text-lg mb-4 leading-snug">台中夜市：<br>傳統美味的新詮釋</h4>
                     <div class="flex items-center justify-between mt-auto">
-                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
+                        <button onclick="toggleReminder(event)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                     </div>
                 </div>
                 <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                     <span class="text-gray-500 text-xs font-bold border-b border-gray-700 pb-1 mb-2 inline-block">週五 21:00</span>
                     <h4 class="text-white font-bold text-lg mb-4 leading-snug">新品試吃：<br>琥珀系列第二彈</h4>
                     <div class="flex items-center justify-between mt-auto">
-                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
+                        <button onclick="toggleReminder(event)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                     </div>
                 </div>
                 <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                      <span class="text-gray-500 text-xs font-bold border-b border-gray-700 pb-1 mb-2 inline-block">週日 15:00</span>
                     <h4 class="text-white font-bold text-lg mb-4 leading-snug">大坑健行：<br>山林間的午后食刻</h4>
                     <div class="flex items-center justify-between mt-auto">
-                        <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
+                        <button onclick="toggleReminder(event)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                     </div>
                 </div>
                  <div class="bg-[#141414] rounded-xl p-5 border border-white/5 relative overflow-hidden group hover:border-primary/30 transition-all hover:-translate-y-1 cursor-pointer">
                     <span class="text-gray-500 text-xs font-bold border-b border-gray-700 pb-1 mb-2 inline-block">10/31 20:00</span>
                    <h4 class="text-white font-bold text-lg mb-4 leading-snug">萬聖節深夜食堂：<br>驚喜限定版</h4>
                    <div class="flex items-center justify-between mt-auto">
-                       <button onclick="toggleReminder(this)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
+                       <button onclick="toggleReminder(event)" class="text-xs bg-white/5 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10 transition-all ml-auto cursor-pointer">提醒我</button>
                    </div>
                </div>
             </div>
@@ -306,14 +459,59 @@
         <div class="max-w-[1600px] mx-auto px-6 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] text-gray-600">
             <p>© 2026 貓掌櫃 Neko Master 職人之魂。保留所有權利。</p>
             <div class="flex gap-6 mt-4 md:mt-0">
-                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors">隱私權政策</a>
-                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors">服務條款</a>
-                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors">聯絡掌櫃</a>
+                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors cursor-pointer">隱私權政策</a>
+                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors cursor-pointer">服務條款</a>
+                <a href="#" onclick="return false;" class="hover:text-gray-400 transition-colors cursor-pointer">聯絡掌櫃</a>
             </div>
         </div>
     </footer>
 
     <script>
+        // 0. 導航菜單管理
+        const navLinks = {
+            'live': document.querySelector('[onclick*="navigateTo(\'live\')"]'),
+            'announce': document.querySelector('[onclick*="navigateTo(\'announce\')"]'),
+            'midnight': document.querySelector('[onclick*="navigateTo(\'midnight\')"]'),
+            'replay': document.querySelector('[onclick*="navigateTo(\'replay\')"]'),
+        };
+
+        function navigateTo(page) {
+            if (page !== 'home') {
+                // 移除所有活躍狀態
+                Object.values(navLinks).forEach(link => {
+                    if (link) link.classList.remove('active');
+                });
+                
+                // 添加當前頁面的活躍狀態
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach(link => {
+                    if (link.textContent.includes(getPageName(page))) {
+                        link.classList.add('active');
+                    }
+                });
+
+                showToast(`已切換到：${getPageName(page)} 📺`);
+            }
+        }
+
+        function getPageName(page) {
+            const names = {
+                'live': '實境直播',
+                'announce': '直播預告',
+                'midnight': '深夜食堂',
+                'replay': '精彩回放',
+                'home': '首頁'
+            };
+            return names[page] || page;
+        }
+
+        // 初始化導航
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.textContent.includes('實境直播')) {
+                link.classList.add('active');
+            }
+        });
+
         // 1. 聊天室功能
         const chatInput = document.getElementById('chat-input');
         const chatContainer = document.getElementById('chat-container');
@@ -400,13 +598,15 @@
             }
         }
 
-        // 5. 開播��醒功能
+        // 5. 開播提醒功能
         function notifyLive() {
             showToast('✨ 已將開播時間加入提醒！');
         }
 
         // 6. 提醒我按鈕
-        function toggleReminder(btn) {
+        function toggleReminder(event) {
+            event.stopPropagation();
+            const btn = event.target;
             if (btn.classList.contains('active-reminder')) {
                 btn.classList.remove('active-reminder', 'bg-primary', 'text-black');
                 btn.classList.add('bg-white/5', 'text-gray-300');
